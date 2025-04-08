@@ -54,6 +54,7 @@ class "CustomerId" {
 }
 }
 Customer "1" --> "1" Address
+Customer "1" --> "1" CustomerId
 SalesOrder "1" --> "1" CustomerId
 SalesOrder "1" --> "many" SalesOrderItem : manages
 SalesOrderItem "1" --> "1" Money
