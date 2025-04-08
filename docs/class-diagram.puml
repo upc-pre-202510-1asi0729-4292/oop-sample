@@ -1,0 +1,62 @@
+@startuml classDiagram
+package "CRM context" {
+entity "Customer" {
+*id: CustomerId
+--
+name: String
+email: String
+address: Address
+--
++updateContactInfo(email, address): void
+}
+}
+
+package "Sales context" {
+entity "SalesOrder" {
+*id: UUID
+--
+customerId: CustomerId
+orderDate: LocalDateTime
+items: List<SalesOrderItem>
+totalAmount: Money
+}
+entity "SalesOrderItem" {
+productId: ProductId
+quantity: int
+unitPrice: Money
+--
++calculateSubtotal(): Money
+}
+
+class "ProductId" {
+*value: UUID
+}
+}
+
+package "Shared context" {
+class "Money" {
+*amount: BigDecimal
+*currency: Currency
+--
++add(other): Money
++multiply(multiplier): Money
+}
+class "Address" {
+*street: String
+*number: String
+*city: String
+*stateOrRegion: String
+*postalCode: String
+*country: String
+}
+class "CustomerId" {
+*value: UUID
+}
+}
+Customer "1" --> "1" Address
+SalesOrder "1" --> "1" CustomerId
+SalesOrder "1" --> "many" SalesOrderItem : manages
+SalesOrderItem "1" --> "1" Money
+SalesOrderItem "1" --> "1" ProductId
+SalesOrder "1" --> "1" Money
+@enduml
